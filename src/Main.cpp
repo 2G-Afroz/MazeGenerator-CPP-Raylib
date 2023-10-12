@@ -1,8 +1,4 @@
-#include <cstdlib>
-#include <iostream>
-#include <iterator>
 #include <raylib.h>
-#include <type_traits>
 #include <vector>
 #include <stack>
 #define SIZE 5 // Base val is 40
