@@ -1,9 +1,9 @@
 #include <raylib.h>
 #include <vector>
 #include <stack>
-#define SIZE 5 // Base val is 40
+#define SIZE 20 // Base val is 40
 #define WIDTH 762 // This is the width and height of Window 
-#define ROWS 152 // this is WIDTH/SIZE 
+#define ROWS 38 // this is WIDTH/SIZE 
 using namespace std;
 
 class Cell{
@@ -134,7 +134,7 @@ void removeWalls(vector<Cell> &grids, int c, int n){
 //### The MAIN function ###//
 int main(){
 
-  //SetTargetFPS(60);
+  SetTargetFPS(60);
 
   // Initializing rows and cols
   int rows = WIDTH/SIZE;  // 19
