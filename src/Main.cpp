@@ -1,9 +1,9 @@
 #include <raylib.h>
 #include <vector>
 #include <stack>
-#define SIZE 20 // Base val is 40
+#define SIZE 40 // Base val is 40
 #define WIDTH 762 // This is the width and height of Window 
-#define ROWS 38 // this is WIDTH/SIZE 
+#define ROWS 19 // this is WIDTH/SIZE 
 using namespace std;
 
 class Cell{
@@ -55,8 +55,8 @@ class Cell{
       }
     }
 
-    void highilght(){
-      DrawRectangle(x_axis, y_axis, SIZE-1, SIZE-1, GREEN);
+    void highlight(){
+      DrawRectangle(x_axis, y_axis, SIZE-1, SIZE-1, YELLOW);
     }
 
 };
@@ -154,6 +154,8 @@ int main(){
 
   // Creating a cell to keep track on current cell
   int currentIndex = 0;
+
+
   stack.push(currentIndex);
   grids.at(currentIndex).visited = true;
 
@@ -186,7 +188,7 @@ int main(){
       // Drawing the Grids
       for(int i=0;i<grids.size();i++){
           grids.at(i).draw();
-          grids.at(currentIndex).highilght();
+          grids.at(currentIndex).highlight();
       }
 
 		EndDrawing();
