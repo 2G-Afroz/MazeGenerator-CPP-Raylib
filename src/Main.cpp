@@ -1,8 +1,9 @@
+#include <iostream>
 #include <raylib.h>
 #include <vector>
 #include <stack>
 #define SIZE 40 // Base val is 40
-#define WIDTH 762 // This is the width and height of Window 
+#define WIDTH 760 // This is the width and height of Window 
 #define ROWS 19 // this is WIDTH/SIZE 
 using namespace std;
 
@@ -10,7 +11,9 @@ class Cell{
   private:
     int x_axis, y_axis;
   public:
-    bool visited;
+    bool visitedCell;
+    bool visitedPath;
+    bool foundPath;
     bool walls[4];
 
     // Empty constructor
@@ -19,7 +22,9 @@ class Cell{
 
     Cell(int x, int y){
       // Initially making all the cells unvisited
-      visited = false;
+      visitedCell = false;
+      visitedPath = false;
+      foundPath = false;
 
       // Initially making all wall visible/available.
       walls[0] = true;
@@ -32,31 +37,41 @@ class Cell{
       y_axis = y * SIZE + 1;
     }
 
+
     void draw(){
+      // Visited Cell
+      if(visitedCell){
+        DrawRectangle(x_axis, y_axis, SIZE, SIZE, RED);
+      }
+
+      if(visitedPath){
+        DrawRectangle(x_axis, y_axis, SIZE, SIZE, PURPLE);
+      }
+
+      if(foundPath){
+        DrawRectangle(x_axis, y_axis, SIZE, SIZE, GREEN);
+      }
+
       // Top 
      if(walls[0])
-        DrawLine(x_axis, y_axis, x_axis+SIZE, y_axis, WHITE);
+        DrawLine(x_axis-1, y_axis, x_axis+SIZE, y_axis, BLACK);
 
       // Right
       if(walls[1])
-        DrawLine(x_axis+SIZE, y_axis, x_axis+SIZE, y_axis+SIZE, WHITE);
+        DrawLine(x_axis+SIZE-1, y_axis-1, x_axis+SIZE-1, y_axis+SIZE, BLACK);
 
       // Bottom
       if(walls[2])
-        DrawLine(x_axis, y_axis+SIZE, x_axis+SIZE, y_axis+SIZE, WHITE);
+        DrawLine(x_axis-1, y_axis+SIZE-1, x_axis+SIZE, y_axis+SIZE-1, BLACK);
 
       // Left
       if(walls[3])
-        DrawLine(x_axis, y_axis, x_axis, y_axis+SIZE, WHITE);
+        DrawLine(x_axis-1, y_axis-1, x_axis, y_axis+SIZE, BLACK);
 
-      // Visited Cell
-      if(visited){
-        DrawRectangle(x_axis, y_axis, SIZE, SIZE, RED);
-      }
     }
 
     void highlight(){
-      DrawRectangle(x_axis, y_axis, SIZE-1, SIZE-1, YELLOW);
+      DrawRectangle(x_axis, y_axis, SIZE-2, SIZE-2, ORANGE);
     }
 
 };
@@ -78,19 +93,19 @@ int getURN(vector<Cell> grids, int currentIndex){
   vector<int> neighborIndex;
 
   int top = getIndex(i,j-1);
-  if(top != -1 && !grids.at(top).visited)
+  if(top != -1 && !grids.at(top).visitedCell)
     neighborIndex.push_back(top);
 
   int right = getIndex(i+1,j);
-  if(right != -1 && !grids.at(right).visited)
+  if(right != -1 && !grids.at(right).visitedCell)
     neighborIndex.push_back(right);
   
   int bottom = getIndex(i,j+1);
-  if(bottom != -1 && !grids.at(bottom).visited)
+  if(bottom != -1 && !grids.at(bottom).visitedCell)
     neighborIndex.push_back(bottom);
 
   int left = getIndex(i-1,j);
-  if(left != -1 && !grids.at(left).visited)
+  if(left != -1 && !grids.at(left).visitedCell)
     neighborIndex.push_back(left);
 
   if(neighborIndex.size()>0){
@@ -130,41 +145,7 @@ void removeWalls(vector<Cell> &grids, int c, int n){
   }
 }
 
-
-//### The MAIN function ###//
-int main(){
-
-  SetTargetFPS(60);
-
-  // Initializing rows and cols
-  int rows = WIDTH/SIZE;  // 19
-  int cols = WIDTH/SIZE;  // 19
-
-  // Declaring a grids variable to store all the cells.
-  vector<Cell> grids;
-  // Declaring a stack to track the cells [ for backtracking ]
-  stack<int> stack;
-
-  // Initializing the grids
-  for(int i=0;i<rows;i++){
-    for(int j=0;j<cols;j++){
-      grids.push_back(Cell(i, j));  
-    }
-  }
-
-  // Creating a cell to keep track on current cell
-  int currentIndex = 0;
-
-
-  stack.push(currentIndex);
-  grids.at(currentIndex).visited = true;
-
-	InitWindow(WIDTH, WIDTH,"MazeGenerator");
-
-	ClearBackground(WHITE);
-
-	while(!WindowShouldClose()){
-		BeginDrawing();
+bool createMaze(vector<Cell> &grids, int &currentIndex, stack<int> &stack){
       // Update the neighborIndex here
       // Taking the random unvisited neighbor
       int next = getURN(grids, currentIndex);
@@ -178,19 +159,159 @@ int main(){
         stack.push(currentIndex);
 
         // Marking the current cell as visited
-        grids.at(currentIndex).visited = true;
+        grids.at(currentIndex).visitedCell = true;
       }
       else if(!stack.empty()){
         currentIndex = stack.top();
         stack.pop();
       }
-
-      // Drawing the Grids
-      for(int i=0;i<grids.size();i++){
-          grids.at(i).draw();
-          grids.at(currentIndex).highlight();
+      else{
+        return true;
       }
 
+    return false;
+}
+
+void drawMaze(vector<Cell> &grids, int &currentIndex){
+  // Drawing the Grids
+  for(int i=0;i<grids.size();i++){
+    grids.at(i).draw();
+  }
+ 
+}
+
+// This function is used to get the NextPossiblePath(NPP)
+int getNPP(vector<Cell> grids, int currentIndex){
+  int i = currentIndex/ROWS;
+  int j = currentIndex%ROWS;
+
+  int top = getIndex(i,j-1);
+  if(top != -1 && !grids.at(top).visitedPath && !grids.at(currentIndex).walls[0]){
+    return top;
+  }
+
+  int right = getIndex(i+1,j);
+  if(right != -1 && !grids.at(right).visitedPath && !grids.at(currentIndex).walls[1]){
+    return right;
+  }
+  
+  int bottom = getIndex(i,j+1);
+  if(bottom != -1 && !grids.at(bottom).visitedPath && !grids.at(currentIndex).walls[2]){
+    return bottom;
+  }
+
+  int left = getIndex(i-1,j);
+  if(left != -1 && !grids.at(left).visitedPath && !grids.at(currentIndex).walls[3]){
+    return left;
+  }
+
+  return -1;
+}
+
+//### The MAIN function ###//
+int main(){
+
+  SetTargetFPS(60);
+
+  // Initializing rows and cols
+  int rows = WIDTH/SIZE;  // 19
+  int cols = WIDTH/SIZE;  // 19
+
+  // Declaring a grids variable to store all the cells.
+  vector<Cell> grids;
+  // Declaring a stack to track the cells [ for backtracking ]
+  std::stack<int> stack;
+
+  // Initializing the grids
+  for(int i=0;i<rows;i++){
+    for(int j=0;j<cols;j++){
+      grids.push_back(Cell(i, j));  
+    }
+  }
+
+  // Creating a cell to keep track on current cell
+  int currentIndex = 0;
+
+  // These are for DFS Path finding algorithm
+  int start = -1;
+  int current = -1;
+  int end = -1;
+  std::stack<int> pathStack;
+
+  stack.push(currentIndex);
+  grids.at(currentIndex).visitedCell = true;
+
+  bool mazeCreated = false;
+
+	InitWindow(WIDTH, WIDTH,"MazeGenerator");
+
+
+	while(!WindowShouldClose()){
+		BeginDrawing();
+	  ClearBackground(BLACK);
+
+      // Drawing the Maze
+      drawMaze(grids, currentIndex);
+
+      // Creating the Maze if not created
+      if(!mazeCreated){
+        mazeCreated = createMaze(grids, currentIndex, stack);
+        grids.at(currentIndex).highlight();
+      }
+      else{
+        // Maze has been generated
+        // Apply DFS algorithm here.
+
+        // Taking Starting position from user
+        if(current == -1){
+          DrawText("Pick START Position", 200, WIDTH/2-5, 40, BLACK);
+          if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            int i = GetMouseX()/SIZE;
+            int j = GetMouseY()/SIZE;
+            current = getIndex(i, j);
+            start = current;
+            pathStack.push(current);
+            grids.at(current).visitedPath = true;
+            grids.at(current).foundPath = true;
+	          ClearBackground(BLACK);
+          }
+        }
+        else{
+          // Taking Ending position from user
+          if(end == -1){
+            DrawText("Pick END Position", 200, WIDTH/2-5, 40, BLACK);
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+              int i = GetMouseX()/SIZE;
+              int j = GetMouseY()/SIZE;
+              end = getIndex(i, j);
+	            ClearBackground(BLACK);
+            }
+          }
+          else {
+            if(current != end){
+              int next = getNPP(grids, current);
+                if(next != -1){
+                  current = next;
+                  pathStack.push(current);
+                  grids.at(current).visitedPath = true;
+                  grids.at(current).foundPath = true;
+                }
+                else{
+                  if(!pathStack.empty()){
+                    grids.at(current).foundPath = false;
+                    pathStack.pop();
+                    current = pathStack.top();
+                  }
+                }
+            }
+            else{
+              DrawText("FOUND", 250, WIDTH/2, 50, BLACK);
+            }
+            grids.at(start).highlight();
+            grids.at(end).highlight();
+          }
+        }
+      }
 		EndDrawing();
 	}
 
