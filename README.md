@@ -1,32 +1,58 @@
-# MazeGenerator-CPP-Raylib
+# Maze Generator and Pathfinding Visualizer
 
-## Description
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/MdAfrozAlam8/MazeGenerator-CPP-Raylib.svg?style=flat&label=Star)](https://github.com/YourUsername/YourRepoName/stargazers)
 
-Welcome to the MazeGenerator-CPP-Raylib repository! This project is a maze generator program 💻 implemented in C++ and powered by the Raylib library. It provides a fascinating exploration of maze creation algorithm with graphical visualization.
+An interactive maze generator and pathfinding visualizer built with C++ and Raylib.
 
-## Key Features
+![Maze Generator Demo](demo.gif)
 
-* **Maze Generation:** This program employs maze generation algorithm with dynamic size of maze by using backtracking concept.
-* **Graphical Visualization:** Raylib brings life to the mazes with vibrant graphics, providing an immersive and visually appealing experience.
-* **DFS Path Finding Algorithm:** This program employs path finding algorithm using DFS algorithm. You can visualize it by looking at it.
+## Table of Contents
+
+- [Maze Generator and Pathfinding Visualizer](#maze-generator-and-pathfinding-visualizer)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
+
+## About
+
+This project is a maze generator and pathfinding visualizer that allows you to interactively generate mazes and visualize the process. It is implemented in C++ using the Raylib library for graphics.
+
+## Features
+
+- **Maze Generation**: Generate random mazes using the Depth-First Search (DFS) algorithm.
+- **Interactive Pathfinding**: Visualize pathfinding algorithms like DFS in the generated maze.
+- **User-Friendly**: Easy-to-use interface with mouse-driven interactions.
 
 ## Getting Started
 
-**To try out this maze generator**  
-1. Clone this repository to you local machine.
-2. Install the necessary dependencies, including C++ compiler and Raylib.
-3. Compile and run the program using ```make``` command.
+### Prerequisites
 
-## Screenshots
+- **[Raylib](https://www.raylib.com/)**: Make sure you have Raylib installed.
+- **C++ Compiler**: You need a C++ compiler to build the project.
 
-![Maze size 20](assets/size_20.png)
-![Maze size 40](assets/size_40.png)
-![Maze Path ](assets/pathFindDFS.png)
+### Installation
 
-## Contributing
+1. Clone the repo:
 
-I welcome contributions! Feel free to report issues, suggest improvements, or submit you own enhancements.
+   ```sh
+   git clone https://github.com/MdAfrozAlam8/MazeGenerator-CPP-Raylib.git
 
-## License
+2. Build and run the project
 
-The project is open-source and available under the [MIT License](./liscense)
+   ```sh
+   cd MazeGenerator-CPP-Raylib;
+   make
+
+# Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on how to contribute to this project.
+
+# License
+
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
