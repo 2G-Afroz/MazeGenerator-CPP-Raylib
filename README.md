@@ -5,7 +5,7 @@
 
 An interactive maze generator and pathfinding visualizer built with C++ and Raylib.
 
-![Maze Generator Demo](demo.gif)
+![Maze Generator Demo](./assets/mazeGenerator.gif)
 
 ## Table of Contents
 
