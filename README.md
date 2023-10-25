@@ -1,7 +1,7 @@
 # Maze Generator and Pathfinding Visualizer
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/MdAfrozAlam8/MazeGenerator-CPP-Raylib.svg?style=flat&label=Star)](https://github.com/YourUsername/YourRepoName/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/MdAfrozAlam8/MazeGenerator-CPP-Raylib.svg?style=flat&label=Star)](https://github.com/MdAfrozAlam8/MazeGenerator-CPP-Raylib/stargazers)
 
 An interactive maze generator and pathfinding visualizer built with C++ and Raylib.
 
